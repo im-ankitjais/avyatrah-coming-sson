@@ -121,7 +121,7 @@
       <a href="#" class="social" style="width:42px;height:42px;border-radius:12px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:18px;transition:transform .2s,background .2s,color .2s">💼</a>
       <a href="https://wa.me/9337339583" class="social" style="width:42px;height:42px;border-radius:12px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:18px;transition:transform .2s,background .2s,color .2s">💬</a>
     </div>
-    <span style="font-size:13px;color:#9ec9bb;width:100%;text-align:center">© 2026 AvyaTrah · New Delhi, India · hello@avyatrah.com</span>
+    <span style="font-size:13px;color:#9ec9bb;width:100%;text-align:center">© 2026 AvyaTrah · New Delhi, India · admin@avyatrah.com</span>
   </footer>
 </div>
 </x-dc>
@@ -141,7 +141,7 @@ class Component extends DCLogic {
      Until you replace YOUR_FORM_ID, the form shows a reminder instead
      of sending.
   ============================================================ */
-  var NOTIFY_ENDPOINT = "https://script.google.com/macros/s/AKfycbyf_Mwj6fTd5AE6uMJkTHt2ME8qVFOSC9LUVcwoYg7l-vZNSTr9D2cqo9HHU_af2qCk9Q/exec";
+  var NOTIFY_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID";
 
   var form  = document.getElementById('notifyForm');
   var email = document.getElementById('notifyEmail');
@@ -149,6 +149,11 @@ class Component extends DCLogic {
   var msg   = document.getElementById('notifyMsg');
 
   function show(text, color){ msg.textContent = text; msg.style.color = color; msg.style.opacity = 1; }
+  function succeed(){
+    form.classList.add('ok');
+    document.getElementById('notifyRow').style.display = 'none';
+    show("You're on the list! We'll ping you at launch 🎉", '#ffe07a');
+  }
 
   form.addEventListener('submit', function(e){
     e.preventDefault();
@@ -159,25 +164,39 @@ class Component extends DCLogic {
     if(NOTIFY_ENDPOINT.indexOf('YOUR_FORM_ID') !== -1){
       show('Almost there — add your form endpoint in the script to go live.', '#ffe07a'); return;
     }
-    btn.disabled = true; var label = btn.textContent; btn.textContent = 'Sending…';
+    var label = btn.textContent; btn.disabled = true; btn.textContent = 'Sending…';
+    function reset(){ btn.disabled = false; btn.textContent = label; }
+
+    /* Google Apps Script web apps can't return CORS headers, so a normal
+       JSON POST triggers a blocked preflight ("CORS error"). We instead send
+       a "simple" no-cors request (text/plain, no preflight): the row still
+       saves, but the response is opaque, so we treat completion as success. */
+    if(/script\.google\.com/.test(NOTIFY_ENDPOINT)){
+      fetch(NOTIFY_ENDPOINT, {
+        method: 'POST', mode: 'no-cors',
+        headers: { 'Content-Type':'text/plain;charset=utf-8' },
+        body: JSON.stringify({ email: val })
+      }).then(succeed).catch(function(){
+        show('Network hiccup — please try again 🔁', '#ffd9d0'); reset();
+      });
+      return;
+    }
+
+    /* Formspree and other endpoints that DO return CORS + JSON */
     fetch(NOTIFY_ENDPOINT, {
       method: 'POST',
       headers: { 'Accept':'application/json', 'Content-Type':'application/json' },
       body: JSON.stringify({ email: val })
     }).then(function(r){
-      if(r.ok){
-        form.classList.add('ok');
-        document.getElementById('notifyRow').style.display = 'none';
-        show("You're on the list! We'll ping you at launch 🎉", '#ffe07a');
-      } else {
+      if(r.ok){ succeed(); }
+      else {
         r.json().then(function(d){
           show((d && d.errors && d.errors[0] && d.errors[0].message) || 'Hmm, that didn’t work. Try again?', '#ffd9d0');
         }).catch(function(){ show('Hmm, that didn’t work. Try again?', '#ffd9d0'); });
-        btn.disabled = false; btn.textContent = label;
+        reset();
       }
     }).catch(function(){
-      show('Network hiccup — please try again 🔁', '#ffd9d0');
-      btn.disabled = false; btn.textContent = label;
+      show('Network hiccup — please try again 🔁', '#ffd9d0'); reset();
     });
   });
 })();
