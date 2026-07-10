@@ -38,6 +38,10 @@
   input::placeholder{color:rgba(191,227,214,.7)}
   a.social:hover{background:var(--accent)!important;color:var(--accent-ink)!important;transform:translateY(-3px)}
   a.contact:hover{background:rgba(255,255,255,.14)!important;border-color:rgba(255,203,46,.5)!important;transform:translateY(-3px)}
+  #notifyRow:focus-within{border-color:rgba(255,203,46,.6);background:rgba(255,255,255,.12)}
+  #notifyBtn:hover{transform:translateY(-1px);filter:brightness(1.05)}
+  #notifyBtn:disabled{cursor:default;opacity:.7;transform:none;filter:none}
+  #notifyForm.ok #notifyRow{border-color:rgba(255,203,46,.6)}
 </style>
 </helmet>
 
@@ -71,13 +75,22 @@
 
       <h1 style="animation:rise .7s cubic-bezier(.2,.8,.2,1) .08s both;font-family:'Baloo 2',cursive;font-weight:800;font-size:clamp(48px,9vw,110px);line-height:.92;letter-spacing:-2px;margin:16px 0 0;text-transform:uppercase">Launching<br><span style="color:var(--accent)">soon</span> <span style="font-family:'Caveat',cursive;font-weight:700;text-transform:none;font-size:.62em;color:#fff;display:inline-block;transform:rotate(-4deg)">get ready 🧭</span></h1>
 
-      <p style="animation:rise .7s cubic-bezier(.2,.8,.2,1) .16s both;color:#dff2ea;font-size:clamp(17px,2.2vw,22px);line-height:1.55;margin:16px auto 0;max-width:540px;font-weight:500">Adventurous, budget-friendly group trips for the young &amp; restless are almost here. Show up solo & leave with a whole squad. <span style="font-family:'Caveat',cursive;font-weight:700;color:var(--accent);font-size:1.2em">let's gooo</span> 💚</p>
+      <p style="animation:rise .7s cubic-bezier(.2,.8,.2,1) .16s both;color:#dff2ea;font-size:clamp(17px,2.2vw,22px);line-height:1.55;margin:16px auto 0;max-width:540px;font-weight:500">Adventurous, budget-friendly group trips for the young &amp; restless are almost here. Show up solo — leave with a whole squad. <span style="font-family:'Caveat',cursive;font-weight:700;color:var(--accent);font-size:1.2em">let's gooo</span> 💚</p>
+
+      <!-- notify me -->
+      <form id="notifyForm" novalidate style="animation:rise .7s cubic-bezier(.2,.8,.2,1) .24s both;margin:30px auto 0;max-width:480px;width:100%">
+        <div id="notifyRow" style="display:flex;gap:10px;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.2);border-radius:16px;padding:8px;backdrop-filter:blur(8px);flex-wrap:wrap">
+          <input id="notifyEmail" type="email" name="email" required autocomplete="email" placeholder="you@email.com" aria-label="Email address" style="flex:1 1 200px;min-width:0;background:transparent;border:0;outline:none;color:#fff;font-size:16px;font-weight:500;padding:12px 16px">
+          <button type="submit" id="notifyBtn" style="flex:0 0 auto;cursor:pointer;border:0;background:var(--accent);color:var(--accent-ink);font-family:'Baloo 2',cursive;font-weight:800;font-size:16px;letter-spacing:.3px;padding:12px 24px;border-radius:12px;transition:transform .15s,filter .15s">Notify me 🔔</button>
+        </div>
+        <p id="notifyMsg" role="status" aria-live="polite" style="min-height:20px;margin:11px 2px 0;font-size:14px;font-weight:600;color:#dff2ea;text-align:center;opacity:0;transition:opacity .25s"></p>
+      </form>
 
       <!-- contact info -->
       <div style="animation:rise .7s cubic-bezier(.2,.8,.2,1) .32s both;margin-top:26px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
         <a href="mailto:hello@avyatrah.com" class="contact" style="display:flex;align-items:center;gap:13px;text-align:left;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.2);border-radius:18px;padding:14px 22px;backdrop-filter:blur(8px);transition:transform .2s,background .2s,border-color .2s">
           <span style="flex:0 0 auto;width:44px;height:44px;border-radius:12px;background:rgba(255,203,46,.18);display:flex;align-items:center;justify-content:center;font-size:22px">✉️</span>
-          <span><span style="display:block;font-size:12px;font-weight:700;letter-spacing:1px;color:var(--accent);text-transform:uppercase">Email</span><span style="display:block;font-family:'Baloo 2',cursive;font-weight:700;font-size:17px;color:#fff">admin@avyatrah.com</span></span>
+          <span><span style="display:block;font-size:12px;font-weight:700;letter-spacing:1px;color:var(--accent);text-transform:uppercase">Email</span><span style="display:block;font-family:'Baloo 2',cursive;font-weight:700;font-size:17px;color:#fff">hello@avyatrah.com</span></span>
         </a>
         <a href="https://instagram.com/avyatrah" target="_blank" rel="noopener" class="contact" style="display:flex;align-items:center;gap:13px;text-align:left;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.2);border-radius:18px;padding:14px 22px;backdrop-filter:blur(8px);transition:transform .2s,background .2s,border-color .2s">
           <span style="flex:0 0 auto;width:44px;height:44px;border-radius:12px;background:rgba(255,203,46,.18);display:flex;align-items:center;justify-content:center;font-size:22px">📸</span>
@@ -108,7 +121,7 @@
       <a href="#" class="social" style="width:42px;height:42px;border-radius:12px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:18px;transition:transform .2s,background .2s,color .2s">💼</a>
       <a href="https://wa.me/9337339583" class="social" style="width:42px;height:42px;border-radius:12px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:18px;transition:transform .2s,background .2s,color .2s">💬</a>
     </div>
-    <span style="font-size:13px;color:#9ec9bb;width:100%;text-align:center">© 2026 AvyaTrah · New Delhi, India · admin@avyatrah.com</span>
+    <span style="font-size:13px;color:#9ec9bb;width:100%;text-align:center">© 2026 AvyaTrah · New Delhi, India · hello@avyatrah.com</span>
   </footer>
 </div>
 </x-dc>
@@ -118,6 +131,56 @@ class Component extends DCLogic {
     return {};
   }
 }
+</script>
+<script>
+(function(){
+  /* ============================================================
+     👇 PASTE YOUR FORM ENDPOINT HERE
+     Formspree:  https://formspree.io/f/xxxxxxx   (xxxxxxx = your form ID)
+     Google Sheet / other: paste the web-app URL that accepts a POST.
+     Until you replace YOUR_FORM_ID, the form shows a reminder instead
+     of sending.
+  ============================================================ */
+  var NOTIFY_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID";
+
+  var form  = document.getElementById('notifyForm');
+  var email = document.getElementById('notifyEmail');
+  var btn   = document.getElementById('notifyBtn');
+  var msg   = document.getElementById('notifyMsg');
+
+  function show(text, color){ msg.textContent = text; msg.style.color = color; msg.style.opacity = 1; }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var val = (email.value || '').trim();
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)){
+      show('Please enter a valid email 🙈', '#ffd9d0'); email.focus(); return;
+    }
+    if(NOTIFY_ENDPOINT.indexOf('YOUR_FORM_ID') !== -1){
+      show('Almost there — add your form endpoint in the script to go live.', '#ffe07a'); return;
+    }
+    btn.disabled = true; var label = btn.textContent; btn.textContent = 'Sending…';
+    fetch(NOTIFY_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Accept':'application/json', 'Content-Type':'application/json' },
+      body: JSON.stringify({ email: val })
+    }).then(function(r){
+      if(r.ok){
+        form.classList.add('ok');
+        document.getElementById('notifyRow').style.display = 'none';
+        show("You're on the list! We'll ping you at launch 🎉", '#ffe07a');
+      } else {
+        r.json().then(function(d){
+          show((d && d.errors && d.errors[0] && d.errors[0].message) || 'Hmm, that didn’t work. Try again?', '#ffd9d0');
+        }).catch(function(){ show('Hmm, that didn’t work. Try again?', '#ffd9d0'); });
+        btn.disabled = false; btn.textContent = label;
+      }
+    }).catch(function(){
+      show('Network hiccup — please try again 🔁', '#ffd9d0');
+      btn.disabled = false; btn.textContent = label;
+    });
+  });
+})();
 </script>
 </body>
 </html>
