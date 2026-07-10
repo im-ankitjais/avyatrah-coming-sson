@@ -134,6 +134,7 @@ class Component extends DCLogic {
 </script>
 <script>
 (function(){
+  console.log('AvyaTrah notify form: v3 (no-cors form-encoded)');
   /* ============================================================
      👇 PASTE YOUR FORM ENDPOINT HERE
      Formspree:  https://formspree.io/f/xxxxxxx   (xxxxxxx = your form ID)
@@ -172,10 +173,13 @@ class Component extends DCLogic {
        a "simple" no-cors request (text/plain, no preflight): the row still
        saves, but the response is opaque, so we treat completion as success. */
     if(/script\.google\.com/.test(NOTIFY_ENDPOINT)){
+      /* Body is URL-encoded (a "simple" request) and we do NOT set any custom
+         header, so the browser sends it directly with no OPTIONS preflight.
+         Apps Script reads it as e.parameter.email. Response is opaque under
+         no-cors, so completion = success. */
       fetch(NOTIFY_ENDPOINT, {
         method: 'POST', mode: 'no-cors',
-        headers: { 'Content-Type':'text/plain;charset=utf-8' },
-        body: JSON.stringify({ email: val })
+        body: new URLSearchParams({ email: val })
       }).then(succeed).catch(function(){
         show('Network hiccup — please try again 🔁', '#ffd9d0'); reset();
       });
